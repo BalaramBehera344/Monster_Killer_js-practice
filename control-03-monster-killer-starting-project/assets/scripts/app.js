@@ -237,6 +237,7 @@ function healPlayerHandler() {
   increasePlayerHealth(HEAL_VALUE);
   currentPlayerHealth += HEAL_VALUE;
   endRound();
+  console.log("balaram");
 }
 
 function printLogHandler() {
