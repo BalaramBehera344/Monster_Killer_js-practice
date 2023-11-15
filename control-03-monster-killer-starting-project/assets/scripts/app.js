@@ -8,16 +8,32 @@ const LOG_EVENT_MONSTER_ATTACK = "MONSTER_ATTACK";
 const LOG_EVENT_PLAYER_HEAL = "PLAYER_HEAL";
 const LOG_EVENT_GAME_OVER = "GAME_OVER";
 
-const enterValueForLife = prompt(
-  "Please enter Maximum life for you and moster",
-  "100"
-);
-let chosenMaxLife = parseInt(enterValueForLife);
 let battleLog = [];
 
-if (isNaN(chosenMaxLife) || chosenMaxLife <= 0) {
-  chosenMaxLife = 100;
+//Using throw keyword to throw error if you enter wrong thing..
+function getMaxLifeValues() {
+  const enterValueForLife = prompt(
+    "Please enter Maximum life for you and moster",
+    "100"
+  );
+  const parsedValue = parseInt(enterValueForLife);
+  if (isNaN(parsedValue) || parsedValue <= 0) {
+    throw { message: "Invalid user input, not a number!!" };
+  }
+  return parsedValue;
 }
+
+let chosenMaxLife;
+//Using try catch block to throw error if you entered wrong..
+try {
+  chosenMaxLife = getMaxLifeValues();
+} catch (error) {
+  console.log(error);
+  chosenMaxLife = 100;
+  alert(
+    "You have enter wrong thinh, by default 100 was used. Enjoy your game !!"
+  );
+} 
 
 let currentMonsterHealth = chosenMaxLife;
 let currentPlayerHealth = chosenMaxLife;
@@ -33,8 +49,8 @@ function logInfo(ev, val, monsterHealth, playerHealth) {
     finalPlayerHealth: playerHealth,
   };
 
-//Replacing if-else statement codes to switch case statement
-//It will also works same as the if-else
+  //Replacing if-else statement codes to switch case statement
+  //It will also works same as the if-else
   switch (ev) {
     case LOG_EVENT_PLAYER_ATTACK:
       let logEntry = {
@@ -82,7 +98,7 @@ function logInfo(ev, val, monsterHealth, playerHealth) {
       };
       break;
     default:
-      logEntry ={};
+      logEntry = {};
   }
 
   // if (ev === LOG_EVENT_PLAYER_ATTACK) {
@@ -224,11 +240,17 @@ function healPlayerHandler() {
 }
 
 function printLogHandler() {
-  console.log(battleLog);
+  let i = 0;
+  for (const logEntry of battleLog) {
+    console.log(`#${i}`);
+    for (const key in logEntry) {
+      console.log(`${key} => ${logEntry[key]}`);
+    }
+    i++;
+  }
 }
 
 attackBtn.addEventListener("click", attackHandler);
 strongAttackBtn.addEventListener("click", strongAttackHandler);
 healBtn.addEventListener("click", healPlayerHandler);
-logBtn.addEventListener('click',printLogHandler);
-
+logBtn.addEventListener("click", printLogHandler);
